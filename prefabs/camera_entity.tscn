@@ -1,10 +1,18 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://assets/materials/threster_material.tres" type="Material" id=1]
+[ext_resource path="res://prefabs/SManualMotion.gd" type="Script" id=2]
+
+[sub_resource type="PhysicsMaterial" id=2]
+bounce = 0.2
 
 [sub_resource type="SphereShape" id=1]
 
-[node name="camera_entity" type="CSGCombiner"]
+[node name="camera_entity" type="RigidBody"]
+physics_material_override = SubResource( 2 )
+gravity_scale = 0.0
+script = ExtResource( 2 )
+manual_motion = true
 
 [node name="model" type="CSGSphere" parent="."]
 cast_shadow = 0
@@ -18,23 +26,21 @@ width = 0.6
 height = 0.5
 depth = 0.5
 
-[node name="engine_main" type="CSGCombiner" parent="model"]
-
-[node name="thruster_a" type="CSGCylinder" parent="model/engine_main"]
+[node name="thruster_a" type="CSGCylinder" parent="model"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.2, 0.2, -1 )
 radius = 0.2
 height = 0.3
 sides = 12
 material = ExtResource( 1 )
 
-[node name="thruster_b" type="CSGCylinder" parent="model/engine_main"]
+[node name="thruster_b" type="CSGCylinder" parent="model"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -0.2, 0.2, -1 )
 radius = 0.2
 height = 0.3
 sides = 12
 material = ExtResource( 1 )
 
-[node name="thruster_c" type="CSGCylinder" parent="model/engine_main"]
+[node name="thruster_c" type="CSGCylinder" parent="model"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -0.15, -1 )
 radius = 0.2
 height = 0.3
@@ -65,10 +71,7 @@ radius = 0.15
 height = 0.2
 material = ExtResource( 1 )
 
-[node name="RigidBody" type="RigidBody" parent="."]
-can_sleep = false
-
-[node name="CollisionShape" type="CollisionShape" parent="RigidBody"]
+[node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 0, 0, 0 )
 shape = SubResource( 1 )
 
