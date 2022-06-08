@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://prefabs/camera_entity.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/gltf-solar_system/scene.gltf" type="PackedScene" id=2]
+
+[node name="root" type="Spatial"]
+
+[node name="camera_entity" parent="." instance=ExtResource( 1 )]
+transform = Transform( 0.319935, 0, 0.947439, 0, 1, 0, -0.947439, 0, 0.319935, -63.0845, 15.5511, -41.7169 )
+
+[node name="test_gltf" type="Spatial" parent="."]
+transform = Transform( 100, 0, 0, 0, 100, 0, 0, 0, 100, 0, 0, 0 )
+
+[node name="scene" parent="test_gltf" instance=ExtResource( 2 )]
