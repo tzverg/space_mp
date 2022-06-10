@@ -1,14 +1,32 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://prefabs/camera_entity.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/gltf-solar_system/scene.gltf" type="PackedScene" id=2]
+[ext_resource path="res://ui_themes/own_ui_theme.tres" type="Theme" id=3]
+[ext_resource path="res://scripts/UIController.gd" type="Script" id=4]
 
 [node name="root" type="Spatial"]
 
 [node name="camera_entity" parent="." instance=ExtResource( 1 )]
 transform = Transform( 0.319935, 0, 0.947439, 0, 1, 0, -0.947439, 0, 0.319935, -63.0845, 15.5511, -41.7169 )
+motion_type = 1
 
 [node name="test_gltf" type="Spatial" parent="."]
 transform = Transform( 100, 0, 0, 0, 100, 0, 0, 0, 100, 0, 0, 0 )
 
 [node name="scene" parent="test_gltf" instance=ExtResource( 2 )]
+
+[node name="UI" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+script = ExtResource( 4 )
+
+[node name="fps_counter" type="RichTextLabel" parent="UI"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 262.0
+margin_bottom = 46.0
+theme = ExtResource( 3 )
+text = "FPS: 0"
