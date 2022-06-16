@@ -1,11 +1,16 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://prefabs/camera_entity.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/gltf-solar_system/scene.gltf" type="PackedScene" id=2]
 [ext_resource path="res://ui_themes/debug_fps_theme.tres" type="Theme" id=3]
-[ext_resource path="res://scripts/UIController.gd" type="Script" id=4]
 [ext_resource path="res://ui_themes/own_ui_theme.tres" type="Theme" id=5]
 [ext_resource path="res://assets/fonts/PT Magistral Bold Cyrillic.ttf" type="DynamicFontData" id=6]
+[ext_resource path="res://scripts/view/RTL_MotionType.gd" type="Script" id=7]
+[ext_resource path="res://scripts/view/RTL_FPS_counter.gd" type="Script" id=8]
+[ext_resource path="res://scripts/view/VS_Motion_X.gd" type="Script" id=9]
+[ext_resource path="res://scripts/view/VS_Motion_Y.gd" type="Script" id=10]
+[ext_resource path="res://scripts/view/VS_Motion_Z.gd" type="Script" id=11]
+[ext_resource path="res://scripts/P_Engine.gd" type="Script" id=12]
 
 [sub_resource type="DynamicFont" id=1]
 size = 20
@@ -33,12 +38,6 @@ transform = Transform( 100, 0, 0, 0, 100, 0, 0, 0, 100, 0, 0, 0 )
 [node name="UI" type="Control" parent="."]
 margin_right = 1920.0
 margin_bottom = 1080.0
-script = ExtResource( 4 )
-np_motion_object = NodePath("../environment/camera_entity")
-np_fps_counter = NodePath("RTL_FPS_counter")
-np_motion_x = NodePath("P_Engine/VS_Motion_X")
-np_motion_y = NodePath("P_Engine/VS_Motion_Y")
-np_motion_z = NodePath("P_Engine/VS_Motion_Z")
 
 [node name="RTL_FPS_counter" type="RichTextLabel" parent="UI"]
 margin_left = 20.0
@@ -47,6 +46,7 @@ margin_right = 220.0
 margin_bottom = 60.0
 theme = ExtResource( 3 )
 text = "FPS: 000"
+script = ExtResource( 8 )
 
 [node name="P_Engine" type="Panel" parent="UI"]
 self_modulate = Color( 1, 1, 1, 0.501961 )
@@ -54,31 +54,35 @@ margin_left = 1680.0
 margin_top = 20.0
 margin_right = 1900.0
 margin_bottom = 240.0
+script = ExtResource( 12 )
+np_motion_object = NodePath("../../environment/camera_entity")
 
 [node name="VS_Motion_X" type="VSlider" parent="UI/P_Engine"]
 margin_left = 20.0
-margin_top = 20.0
-margin_right = 40.0
-margin_bottom = 140.0
-min_value = -5.0
-max_value = 5.0
-step = 0.01
-allow_greater = true
-allow_lesser = true
-
-[node name="VS_Motion_Y" type="VSlider" parent="UI/P_Engine"]
-margin_left = 100.0
 margin_top = 21.0
-margin_right = 120.0
+margin_right = 80.0
 margin_bottom = 141.0
 min_value = -5.0
 max_value = 5.0
 step = 0.01
 allow_greater = true
 allow_lesser = true
+script = ExtResource( 9 )
+
+[node name="VS_Motion_Y" type="VSlider" parent="UI/P_Engine"]
+margin_left = 80.0
+margin_top = 21.0
+margin_right = 140.0
+margin_bottom = 141.0
+min_value = -5.0
+max_value = 5.0
+step = 0.01
+allow_greater = true
+allow_lesser = true
+script = ExtResource( 10 )
 
 [node name="VS_Motion_Z" type="VSlider" parent="UI/P_Engine"]
-margin_left = 180.0
+margin_left = 140.0
 margin_top = 20.0
 margin_right = 200.0
 margin_bottom = 140.0
@@ -87,6 +91,7 @@ max_value = 5.0
 step = 0.01
 allow_greater = true
 allow_lesser = true
+script = ExtResource( 11 )
 
 [node name="CB_MotionType" type="CheckButton" parent="UI/P_Engine"]
 margin_left = 120.0
@@ -104,3 +109,11 @@ custom_fonts/normal_font = SubResource( 1 )
 text = "Impulse"
 scroll_active = false
 override_selected_font_color = true
+script = ExtResource( 7 )
+
+[connection signal="change_motion_type" from="environment/camera_entity" to="UI/P_Engine/RTL_MotionType" method="_on_camera_entity_change_motion_type"]
+[connection signal="change_motion_direction" from="UI/P_Engine" to="UI/P_Engine/VS_Motion_X" method="_on_P_Engine_change_motion_direction"]
+[connection signal="change_motion_direction" from="UI/P_Engine" to="UI/P_Engine/VS_Motion_Y" method="_on_P_Engine_change_motion_direction"]
+[connection signal="change_motion_direction" from="UI/P_Engine" to="UI/P_Engine/VS_Motion_Z" method="_on_P_Engine_change_motion_direction"]
+[connection signal="toggled" from="UI/P_Engine/CB_MotionType" to="environment/camera_entity" method="_on_CB_MotionType_toggled"]
+[connection signal="toggled" from="UI/P_Engine/CB_MotionType" to="UI/P_Engine/RTL_MotionType" method="_on_CB_MotionType_toggled"]
